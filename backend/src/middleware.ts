@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
 // Extend Express Request type to include userId
-interface CustomRequest extends Request {
+export interface CustomRequest extends Request {
     userId?: string; // Optional in case JWT is invalid
 }
 

@@ -2,7 +2,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
 import jwt from 'jsonwebtoken'
-import { UserModel } from './db';
+import { Request, Response, NextFunction } from "express";
+import { ContentModel, UserModel } from './db';
+import { CustomRequest, userMiddleware } from './middleware';
 const app = express();
 app.use(express.json())
 
@@ -53,8 +55,21 @@ app.post("/api/v1/signin", async (req, res) => {
 
 })
 
-app.post("/api/v1/content", (req, res) => {
+app.post("/api/v1/content",userMiddleware,async (req: CustomRequest, res: Response) => {
+    const link=req.body.link
+    const type=req.body.type
 
+   await ContentModel.create({
+    link,
+    type,
+    title: req.body.title,
+    userId: req.userId,
+    tags: []
+    })
+
+    res.json({
+        message:"Content added"
+    })
 })
 
 app.get("/api/v1/content", (req, res) => {
