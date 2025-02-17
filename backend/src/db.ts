@@ -2,6 +2,7 @@
 
 import {model, Model,Schema} from "mongoose";
 import mongoose from "mongoose";
+import { title } from "process";
 mongoose.connect(process.env.DB_CONNECT as string)
 
   /************************************  DB CONNECTION DONE ***********************************************/
@@ -14,3 +15,13 @@ mongoose.connect(process.env.DB_CONNECT as string)
 
   export const UserModel= model('User',UserSchema)
   
+
+const ContentSchema=new Schema({
+    title:String,
+    link:String,
+    tags:[{type:mongoose.Types.ObjectId,ref:'Tag'}],
+    type:String,
+    userId:{type:mongoose.Types.ObjectId,ref:'User',required:true}
+})
+
+export const ContentModel=model('Content',ContentSchema)
