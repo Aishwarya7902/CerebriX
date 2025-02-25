@@ -42,49 +42,71 @@ app.post("/api/v1/signin", async (req, res) => {
         password
     })
 
-    if(existingUser){
-        const token=jwt.sign({id: existingUser._id}, process.env.JWT_SECRET as string,{expiresIn:'24h'})
-        res.json({token})
+    if (existingUser) {
+        const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET as string, { expiresIn: '24h' })
+        res.json({ token })
     }
-    else{
+    else {
         res.status(403).json({
-            message:'Incorrect Credentials'
+            message: 'Incorrect Credentials'
         })
     }
 
 
 })
 
-app.post("/api/v1/content",userMiddleware,async (req: CustomRequest, res: Response) => {
-    const link=req.body.link
-    const type=req.body.type
+app.post("/api/v1/content", userMiddleware, async (req: CustomRequest, res: Response) => {
+    const link = req.body.link
+    const type = req.body.type
 
-   await ContentModel.create({
-    link,
-    type,
-    title: req.body.title,
-    userId: req.userId,
-    tags: []
+    await ContentModel.create({
+        link,
+        type,
+        title: req.body.title,
+        userId: req.userId,
+        tags: []
     })
 
     res.json({
-        message:"Content added"
+        message: "Content added"
     })
 })
 
-app.get("/api/v1/content",userMiddleware,async (req: CustomRequest, res: Response) => {
-     const userId= req.userId;
-     const content =await ContentModel.find({
-        userId:userId
-     }).populate("userId","username")
+app.get("/api/v1/content", userMiddleware, async (req: CustomRequest, res: Response) => {
+    const userId = req.userId;
+    const content = await ContentModel.find({
+        userId: userId
+    }).populate("userId", "username")
 
     res.json({
         content
     })
 })
 
-app.delete("/api/v1/content", (req, res) => {
+app.delete("/api/v1/content", userMiddleware, async (req: CustomRequest, res: Response) => {
+    try {
+        const contentId = req.body.contentId
+        const content = await ContentModel.findById(contentId).select("userId");;
+        if (!content) {
+            res.status(404).json({ message: "Content not found" });
+        }
+        
+        // Ensure only the owner can delete
+        if (content?.userId && content?.userId.toString() !== req.userId) {
+             res.status(403).json({ message: "Unauthorized to delete this content" });
+        }
 
+        // Delete the content
+        await ContentModel.findByIdAndDelete(contentId);
+
+        res.json({ message: "Content Deleted" });
+        
+    }
+
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
 })
 
 app.post("/api/v1/brain/share", (req, res) => {
