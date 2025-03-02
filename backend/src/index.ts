@@ -3,8 +3,9 @@ dotenv.config()
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from "express";
-import { ContentModel, UserModel } from './db';
+import { ContentModel, LinkModel, UserModel } from './db';
 import { CustomRequest, userMiddleware } from './middleware';
+import { random } from './utils';
 const app = express();
 app.use(express.json())
 
@@ -109,8 +110,28 @@ app.delete("/api/v1/content", userMiddleware, async (req: CustomRequest, res: Re
     }
 })
 
-app.post("/api/v1/brain/share", (req, res) => {
+app.post("/api/v1/brain/share",userMiddleware,async (req: CustomRequest, res: Response) => {
+    const share=req.body.share;
 
+    if(share){ // if share is true , then generate a sharable link
+
+        await LinkModel.create({
+            userId:req.userId,
+            hash:random(10)
+         })
+    }
+
+    else{
+       await LinkModel.deleteOne({
+            userId:req.userId
+        })
+    }
+
+    res.json({
+        message:"Updated Shared Link"
+    })
+    
+    
 })
 
 app.get("/api/v1/brain/:shareLink", (req, res) => {
