@@ -112,29 +112,82 @@ app.delete("/api/v1/content", userMiddleware, async (req: CustomRequest, res: Re
 
 app.post("/api/v1/brain/share",userMiddleware,async (req: CustomRequest, res: Response) => {
     const share=req.body.share;
-
+    
     if(share){ // if share is true , then generate a sharable link
+            
+            const existingLink=await LinkModel.findOne({
+                userId:req.userId
+            })
 
-        await LinkModel.create({
-            userId:req.userId,
-            hash:random(10)
-         })
+            // if the link already exists ...don't regenerate it..just return to the user
+            if(existingLink){
+                res.json({
+                    hash:existingLink.hash
+                })
+
+                return
+            }
+
+
+            const hash=random(10)
+            await LinkModel.create({
+                userId:req.userId,
+                hash:hash
+             })
+    
+             res.json({
+                hash
+            })
+        
+        
     }
-
+// if share is false , hide the content from the world
     else{
        await LinkModel.deleteOne({
             userId:req.userId
         })
+        res.json({
+            message:"Removed Link"
+        })
     }
 
-    res.json({
-        message:"Updated Shared Link"
-    })
+    
     
     
 })
 
-app.get("/api/v1/brain/:shareLink", (req, res) => {
+app.get("/api/v1/brain/:shareLink",async (req: CustomRequest, res: Response) => {
+     const hash =req.params.shareLink
+
+    const link= await LinkModel.findOne({
+        hash
+     })
+
+    if(!link){
+        res.status(411).json({
+            message:"Sorry Incorrect inputs"
+        })
+    }
+
+    const content=await ContentModel.find({
+        userId:link?.userId
+    })
+
+    const user=await UserModel.findOne({
+        _id:link?.userId
+    })
+
+    if(!user){
+        res.status(411).json({
+            message:"user does not exist ,Something went wrong"
+        })
+    }
+
+    res.json({
+        username:user?.username,
+        content:content
+    })
+
 
 })
 
