@@ -157,7 +157,7 @@ app.post("/api/v1/brain/share",userMiddleware,async (req: CustomRequest, res: Re
 })
 
 app.get("/api/v1/brain/:shareLink",async (req: CustomRequest, res: Response) => {
-     const hash =req.params.shareLink
+    const hash =req.params.shareLink
 
     const link= await LinkModel.findOne({
         hash
