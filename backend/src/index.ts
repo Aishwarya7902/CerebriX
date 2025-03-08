@@ -6,8 +6,11 @@ import { Request, Response, NextFunction } from "express";
 import { ContentModel, LinkModel, UserModel } from './db';
 import { CustomRequest, userMiddleware } from './middleware';
 import { random } from './utils';
+import cors from "cors"
 const app = express();
 app.use(express.json())
+app.use(cors());
+
 
 
 app.post("/api/v1/signup", async (req, res) => {
