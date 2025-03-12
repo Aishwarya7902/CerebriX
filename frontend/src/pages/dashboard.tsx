@@ -6,6 +6,8 @@ import { PlusIcon } from "../icons/PlusIcon"
 import { ShareIcon } from "../icons/ShareIcon"
 import { Sidebar } from "../components/Sidebar"
 import { useContent } from "../hooks/useContent"
+import axios from "axios"
+import { BACKEND_URL } from "../config"
 
 
 export function Dashboard() {
@@ -42,6 +44,18 @@ export function Dashboard() {
                     variant="secondary"
                     text="Share brain"
                     startIcon={<ShareIcon />}
+                    onClick={async ()=>{
+                       const response= await  axios.post(`${BACKEND_URL}/api/v1/brain/share`,{
+                            share:true
+                        },{
+                            headers:{
+                                "Authorization":localStorage.getItem("token")
+                            }
+                        })
+
+                       const shareUrl=`http://localhost:5173/share/${response.data.hash}`
+                       alert(shareUrl)
+                    }}
                 />
 
             </div>
