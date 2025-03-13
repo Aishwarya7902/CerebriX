@@ -1,3 +1,7 @@
 @import "tailwindcss";
 @tailwind utilities;
 
+.twitter-tweet {
+    max-width: 100% !important;
+    width: 100% !important;
+  }

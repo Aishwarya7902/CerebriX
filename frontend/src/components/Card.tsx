@@ -37,9 +37,9 @@ export function Card({ title, link, type }: CardProps) {
         }
     }, [type, link]); // Only run when the type is 'twitter' or the link changes
     return <div>
-        <div className="bg-white rounded-md   p-4 max-w-72  border border-gray-200 min-h-48 min-w-72">
-            <div className="flex justify-between">
-                <div className="flex items-center text-md">
+        <div className="bg-white rounded-md   p-4   border border-gray-200 shadow-md w-full max-w-sm mx-auto">
+            <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center text-md font-medium">
                     <div className="pr-2 text-gray-500"><ShareIcon /></div>
                     {title}
                 </div>
@@ -70,9 +70,13 @@ export function Card({ title, link, type }: CardProps) {
                         allowFullScreen>
                     </iframe>}
 
-                {type === "twitter" && <blockquote className="twitter-tweet">
-                    <a href={link.replace("x.com", "twitter.com")}></a>
-                </blockquote>}
+                {type === "twitter" && (
+                    <div className="w-full overflow-hidden">
+                        <blockquote className="twitter-tweet w-full">
+                            <a href={link.replace("x.com", "twitter.com")}></a>
+                        </blockquote>
+                    </div>
+                )}
 
             </div>
         </div>
