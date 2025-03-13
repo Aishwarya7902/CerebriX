@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import { DeleteIcon } from "../icons/DeleteIcon";
 import { ShareIcon } from "../icons/ShareIcon";
+import { YoutubeIcon } from "../icons/YoutubeIcon";
+import { TwitterIcon } from "../icons/TwitterIcon";
+import { DarkYoutubeIcon } from "../icons/DarkYoutubeIcon";
+import { DarkTwitterIcon } from "../icons/DarkTwitterIcon";
 
 interface CardProps {
     title: string;
@@ -39,8 +43,12 @@ export function Card({ title, link, type }: CardProps) {
     return <div>
         <div className="bg-white rounded-md   p-4   border border-gray-200 shadow-md w-full max-w-sm mx-auto">
             <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center text-md font-medium">
-                    <div className="pr-2 text-gray-500"><ShareIcon /></div>
+                <div className="flex items-center justify-center text-md font-medium">
+                    <div className="pr-2 text-gray-500">
+                        <a href={link} target="_blank">
+                          {type==="youtube"  ? <DarkYoutubeIcon/> :<DarkTwitterIcon/>}
+                        </a>
+                    </div>
                     {title}
                 </div>
 
