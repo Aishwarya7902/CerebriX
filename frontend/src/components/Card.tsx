@@ -5,6 +5,7 @@ import { DarkYoutubeIcon } from "../icons/DarkYoutubeIcon";
 import { DarkTwitterIcon } from "../icons/DarkTwitterIcon";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
+import { ShareURL } from "./ShareUrl";
 
 interface CardProps {
     contentId: string; // New prop for deletion
@@ -29,6 +30,7 @@ function extractYouTubeID(url: string): string | null {
 export function Card({ contentId, title, link, type }: CardProps) {
     const [isDeleted, setIsDeleted] = useState(false)
     const [showCard, setShowCard] = useState(true);
+    const [showShareUrl, setShowShareUrl] = useState(false);
 
     useEffect(() => {
         if (type === "twitter") {
@@ -62,16 +64,27 @@ export function Card({ contentId, title, link, type }: CardProps) {
     };
 
 
-    useEffect(()=>{
-      if(isDeleted){
-        const timer=setTimeout(()=>{
-             setShowCard(false)
-        },2000)
-        return ()=>clearTimeout(timer)
-      }
-    },[isDeleted])
+    useEffect(() => {
+        if (isDeleted) {
+            const timer = setTimeout(() => {
+                setShowCard(false)
+            }, 2000)
+            return () => clearTimeout(timer)
+        }
+    }, [isDeleted])
+    
 
-    if(!showCard){
+    useEffect(() => {
+        if (showShareUrl) {
+            const timer = setTimeout(() => {
+                setShowShareUrl(false)
+            }, 5000)
+            return () => clearTimeout(timer)
+        }
+    }, [showShareUrl])
+
+
+    if (!showCard) {
         return null
     }
 
@@ -79,7 +92,7 @@ export function Card({ contentId, title, link, type }: CardProps) {
         return (
             <div className="bg-white rounded-md p-4 border border-gray-200 shadow-md w-full max-w-sm mx-auto text-center text-gray-500 opacity-50 transition-opacity duration-500">
                 Content Deleted
-                
+
             </div>
         );
     }
@@ -98,16 +111,25 @@ export function Card({ contentId, title, link, type }: CardProps) {
 
                 <div className="flex items-center">
 
-                    <div className="text-gray-500">
-                        <a href={link} target="_blank">
-                            <ShareIcon />
-                        </a>
+                    <div className="text-gray-500" onClick={() => {
+                        setShowShareUrl(prev => !prev)
+                    }}>
+
+                        <ShareIcon />
+
                     </div>
 
                     <div className="pr-2 text-gray-500" onClick={handleDelete}><DeleteIcon /></div>
                 </div>
 
             </div>
+
+            {/* Render the ShareURL component if showShareUrl is true */}
+            {showShareUrl && (
+                <div className="mb-4">
+                    <ShareURL url={link} />
+                </div>
+            )}
 
             <div className="pt-4">
 
