@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DeleteIcon } from "../icons/DeleteIcon";
 import { ShareIcon } from "../icons/ShareIcon";
-import { YoutubeIcon } from "../icons/YoutubeIcon";
-import { TwitterIcon } from "../icons/TwitterIcon";
 import { DarkYoutubeIcon } from "../icons/DarkYoutubeIcon";
 import { DarkTwitterIcon } from "../icons/DarkTwitterIcon";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
 
 interface CardProps {
+    contentId: string; // New prop for deletion
     title: string;
     link: string;
     type: "twitter" | "youtube";
@@ -23,7 +24,12 @@ function extractYouTubeID(url: string): string | null {
     return match ? match[1] : null;
 }
 
-export function Card({ title, link, type }: CardProps) {
+
+
+export function Card({ contentId, title, link, type }: CardProps) {
+    const [isDeleted, setIsDeleted] = useState(false)
+    const [showCard, setShowCard] = useState(true);
+
     useEffect(() => {
         if (type === "twitter") {
             if (!window.twttr) {
@@ -40,13 +46,51 @@ export function Card({ title, link, type }: CardProps) {
             }
         }
     }, [type, link]); // Only run when the type is 'twitter' or the link changes
-    return <div>
+
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`${BACKEND_URL}/api/v1/content`, {
+                headers: {
+                    "Authorization": localStorage.getItem("token")
+                },
+                data: { contentId }  // Pass contentId from props
+            });
+            setIsDeleted(true)
+        } catch (error) {
+            console.error("Error deleting content:", error);
+        }
+    };
+
+
+    useEffect(()=>{
+      if(isDeleted){
+        const timer=setTimeout(()=>{
+             setShowCard(false)
+        },2000)
+        return ()=>clearTimeout(timer)
+      }
+    },[isDeleted])
+
+    if(!showCard){
+        return null
+    }
+
+    if (isDeleted) {
+        return (
+            <div className="bg-white rounded-md p-4 border border-gray-200 shadow-md w-full max-w-sm mx-auto text-center text-gray-500 opacity-50 transition-opacity duration-500">
+                Content Deleted
+                
+            </div>
+        );
+    }
+
+    return <div className="transition-opacity duration-500">
         <div className="bg-white rounded-md   p-4   border border-gray-200 shadow-md w-full max-w-sm mx-auto">
             <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center justify-center text-md font-medium">
                     <div className="pr-2 text-gray-500">
                         <a href={link} target="_blank">
-                          {type==="youtube"  ? <DarkYoutubeIcon/> :<DarkTwitterIcon/>}
+                            {type === "youtube" ? <DarkYoutubeIcon /> : <DarkTwitterIcon />}
                         </a>
                     </div>
                     {title}
@@ -60,7 +104,7 @@ export function Card({ title, link, type }: CardProps) {
                         </a>
                     </div>
 
-                    <div className="pr-2 text-gray-500"><DeleteIcon /></div>
+                    <div className="pr-2 text-gray-500" onClick={handleDelete}><DeleteIcon /></div>
                 </div>
 
             </div>
