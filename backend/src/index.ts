@@ -89,27 +89,31 @@ app.get("/api/v1/content", userMiddleware, async (req: CustomRequest, res: Respo
 
 app.delete("/api/v1/content", userMiddleware, async (req: CustomRequest, res: Response) => {
     try {
-        const contentId = req.body.contentId
+        const contentId = req.body.contentId ;
         const content = await ContentModel.findById(contentId).select("userId");;
         if (!content) {
-            res.status(404).json({ message: "Content not found" });
+             res.status(404).json({ message: "Content not found" });
+             return
         }
         
         // Ensure only the owner can delete
         if (content?.userId && content?.userId.toString() !== req.userId) {
-             res.status(403).json({ message: "Unauthorized to delete this content" });
+              res.status(403).json({ message: "Unauthorized to delete this content" });
+              return;
         }
 
         // Delete the content
         await ContentModel.findByIdAndDelete(contentId);
 
-        res.json({ message: "Content Deleted" });
+         res.json({ message: "Content Deleted" });
+         return;
         
     }
 
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Internal Server Error" });
+          res.status(500).json({ message: "Internal Server Error" });
+          return
     }
 })
 

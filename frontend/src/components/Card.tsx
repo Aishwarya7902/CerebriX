@@ -31,7 +31,7 @@ export function Card({ contentId, title, link, type }: CardProps) {
     const [isDeleted, setIsDeleted] = useState(false)
     const [showCard, setShowCard] = useState(true);
     const [showShareUrl, setShowShareUrl] = useState(false);
-
+    const [unauthorized, setUnauthorized] = useState(false);
     useEffect(() => {
         if (type === "twitter") {
             if (!window.twttr) {
@@ -55,11 +55,17 @@ export function Card({ contentId, title, link, type }: CardProps) {
                 headers: {
                     "Authorization": localStorage.getItem("token")
                 },
-                data: { contentId }  // Pass contentId from props
+                data: { contentId }
             });
             setIsDeleted(true)
-        } catch (error) {
-            console.error("Error deleting content:", error);
+        } catch (error: any) {
+            // If the API returns 403, it means the user is not authorized
+            if (error.response && (error.response.status === 403 || error.response.status === 404)) {
+                setUnauthorized(true);
+                setTimeout(() => setUnauthorized(false), 2000);
+            } else {
+                console.error("Error deleting content:", error);
+            }
         }
     };
 
@@ -72,7 +78,7 @@ export function Card({ contentId, title, link, type }: CardProps) {
             return () => clearTimeout(timer)
         }
     }, [isDeleted])
-    
+
 
     useEffect(() => {
         if (showShareUrl) {
@@ -123,6 +129,13 @@ export function Card({ contentId, title, link, type }: CardProps) {
                 </div>
 
             </div>
+
+            {/* Render unauthorized feedback if deletion is not permitted */}
+            {unauthorized && (
+                <div className="mb-2 text-red-500 text-center">
+                    Unauthorized to delete this content
+                </div>
+            )}
 
             {/* Render the ShareURL component if showShareUrl is true */}
             {showShareUrl && (
