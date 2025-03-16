@@ -60,7 +60,7 @@ export function Card({ contentId, title, link, type }: CardProps) {
             setIsDeleted(true)
         } catch (error: any) {
             // If the API returns 403, it means the user is not authorized
-            if (error.response && (error.response.status === 403 || error.response.status === 404)) {
+            if (error.response && error.response.status === 403 ) {
                 setUnauthorized(true);
                 setTimeout(() => setUnauthorized(false), 2000);
             } else {
