@@ -48,7 +48,7 @@ export function Dashboard() {
     transition-transform duration-300 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
             <Sidebar />
         </div>
-        <div className={`p-4 min-h-screen bg-gray-100 border border-gray-200 transition-all ${sidebarOpen ? "ml-72" : "ml-4 "}`}>
+        <div className={`p-4 min-h-screen bg-gray-100 border border-gray-200 transition-all ${sidebarOpen ? "ml-0 sm:ml-72" : "ml-4"}`}>
             <CreateContentModal
                 open={modalOpen}
                 onClose={() => {
