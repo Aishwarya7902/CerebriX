@@ -16,7 +16,7 @@ export function Dashboard() {
     const [modalOpen, setModalOpen] = useState(false)
     const [shareUrl, setShareUrl] = useState<string | null>(null);
     const [sidebarOpen, setSidebarOpen] = useState(false)
-    const [filter, setFilter] = useState<"all" | "youtube" | "twitter">("all");
+    const [filter, setFilter] = useState<"all" | "youtube" | "twitter" |"link">("all");
     const { contents, refresh } = useContent()
     const sidebarRef = useRef<HTMLDivElement>(null)
     useEffect(() => {

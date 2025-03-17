@@ -6,12 +6,13 @@ import { DarkTwitterIcon } from "../icons/DarkTwitterIcon";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { ShareURL } from "./ShareUrl";
+import { LinkIcon } from "../icons/LinkIcon";
 
 interface CardProps {
     contentId: string; // New prop for deletion
     title: string;
     link: string;
-    type: "twitter" | "youtube";
+    type: "twitter" | "youtube" | "link";
 }
 
 
@@ -60,7 +61,7 @@ export function Card({ contentId, title, link, type }: CardProps) {
             setIsDeleted(true)
         } catch (error: any) {
             // If the API returns 403, it means the user is not authorized
-            if (error.response && error.response.status === 403 ) {
+            if (error.response && error.response.status === 403) {
                 setUnauthorized(true);
                 setTimeout(() => setUnauthorized(false), 2000);
             } else {
@@ -108,8 +109,11 @@ export function Card({ contentId, title, link, type }: CardProps) {
             <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center justify-center text-md font-medium">
                     <div className="pr-2 text-gray-500">
-                        <a href={link} target="_blank">
-                            {type === "youtube" ? <DarkYoutubeIcon /> : <DarkTwitterIcon />}
+                        <a href={link} target="_blank" rel="noopener noreferrer">
+                            {type === "youtube" ? (<DarkYoutubeIcon />) :
+                                type === "twitter" ? (<DarkTwitterIcon />) :
+                                    type === "link" ? (<LinkIcon />) :
+                                        null}
                         </a>
                     </div>
                     {title}
@@ -165,6 +169,18 @@ export function Card({ contentId, title, link, type }: CardProps) {
                     </div>
                 )}
 
+                {type === "link" && (
+                    <div className="w-full">
+                        <a
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-extrabold py-2 px-4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-2xl truncate"
+                        >
+                            {link}
+                        </a>
+                    </div>
+                )}
             </div>
         </div>
     </div>

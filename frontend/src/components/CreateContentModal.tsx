@@ -8,47 +8,48 @@ import { useNavigate } from "react-router-dom";
 
 enum contentType {
     Youtube = "youtube",
-    Twitter = "twitter"
+    Twitter = "twitter",
+    Link = "link"
 }
 
 export function CreateContentModal({ open, onClose }) {
     const titleRef = useRef<HTMLInputElement>()
     const linkRef = useRef<HTMLInputElement>()
     const [type, setType] = useState(contentType.Youtube)
-     const navigate=useNavigate();
+    const navigate = useNavigate();
 
 
 
-   async function addContent() {
+    async function addContent() {
         const title = titleRef.current?.value
         const link = linkRef.current?.value
         try {
             await axios.post(
-              `${BACKEND_URL}/api/v1/content`,
-              {
-                link,
-                title,
-                type,
-              },
-              {
-                headers: {
-                  Authorization: localStorage.getItem("token"),
+                `${BACKEND_URL}/api/v1/content`,
+                {
+                    link,
+                    title,
+                    type,
                 },
-              }
+                {
+                    headers: {
+                        Authorization: localStorage.getItem("token"),
+                    },
+                }
             );
-      
+
             if (typeof onClose === "function") {
                 onClose(); // Close the modal
-              }
-        
-              navigate("/dashboard"); // Redirect to dashboard
-            
-          } catch (error) {
+            }
+
+            navigate("/dashboard"); // Redirect to dashboard
+
+        } catch (error) {
             console.error("Error adding content:", error);
             // Optionally, handle error state here
-          }
         }
-      
+    }
+
     return <div>
         {open && <div>
 
@@ -81,6 +82,10 @@ export function CreateContentModal({ open, onClose }) {
                                 <Button onClick={() => {
                                     setType(contentType.Twitter)
                                 }} text="Twitter" variant={type === contentType.Twitter ? "primary" : "secondary"}></Button>
+
+                                <Button onClick={() => {
+                                    setType(contentType.Link)
+                                }} text="Link" variant={type === contentType.Link ? "primary" : "secondary"}></Button>
                             </div>
 
                         </div>
