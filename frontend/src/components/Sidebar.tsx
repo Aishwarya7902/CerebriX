@@ -1,3 +1,4 @@
+import { AllContentIcon } from "../icons/AllContentIcon";
 import { AppIcon } from "../icons/AppIcon";
 import { LinkIcon } from "../icons/LinkIcon";
 import { TwitterIcon } from "../icons/TwitterIcon";
@@ -21,6 +22,7 @@ export function Sidebar({onFilterChange} :sidebarProps) {
             <SidebarItem title="Tweets" linkIcon={<TwitterIcon />} onClick={()=>onFilterChange("twitter")}/>
             <SidebarItem title="Videos" linkIcon={<YoutubeIcon />} onClick={()=>onFilterChange("youtube")}/>
             <SidebarItem title="Links" linkIcon={<LinkIcon />} onClick={()=>onFilterChange("link")}/>
+            <SidebarItem title="All Contents" linkIcon={<AllContentIcon />} onClick={()=>onFilterChange("all")}/>
             
             
         </div>
