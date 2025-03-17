@@ -20,6 +20,12 @@ const signupSchema = z.object({
     password: z.string().min(6, "Password must be at least 6 characters long")
 })
 
+//making signin Schema
+const signinSchema = z.object({
+    username: z.string().min(3, "username must be at least 3 characters long"),
+    password: z.string().min(6, "password must be at least 6 characters long")
+})
+
 
 app.post("/api/v1/signup", async (req, res) => {
 
@@ -28,7 +34,7 @@ app.post("/api/v1/signup", async (req, res) => {
 
     if (!result.success) {
         const messages = result.error.errors.map(err => err.message).join(", ");
-        res.status(400).json({ message: messages})
+        res.status(400).json({ message: messages })
         return;
     }
 
@@ -68,13 +74,32 @@ app.post("/api/v1/signup", async (req, res) => {
 })
 
 app.post("/api/v1/signin", async (req, res) => {
-    const username = req.body.username
-    const password = req.body.password
+    const result = signinSchema.safeParse(req.body)
+    if (!result.success) {
+        const messages = result.error.errors.map(err => err.message).join(", ");
+        res.status(400).json({ message: messages })
+        return;
+    }
+    const { username, password } = result.data
 
     const existingUser = await UserModel.findOne({
-        username,
-        password
+        username
     })
+    if (!existingUser) {
+        res.status(403).json({ message: "Incorrect Credentials" });
+        return
+    }
+    if (!existingUser.password) {
+        // Password is missing in the database
+        res.status(403).json({ message: "Incorrect Credentials" });
+        return
+    }
+    // comparing password
+    const validPassword = await bcrypt.compare(password, existingUser.password as string)
+
+    if (!validPassword) {
+        res.status(403).json({ message: "Incorrect Credentials" })
+    }
 
     if (existingUser) {
         const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET as string, { expiresIn: '24h' })
