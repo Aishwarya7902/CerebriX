@@ -7,7 +7,12 @@ import { YoutubeIcon } from "../icons/YoutubeIcon";
 import { AppLogo } from "./AppLogo";
 import { SidebarItem } from "./SidebarItem";
 
-export function Sidebar() {
+
+
+interface sidebarProps{
+    onFilterChange:(filter:"all" | "twitter" | "youtube")=>void
+}
+export function Sidebar({onFilterChange} :sidebarProps) {
     return <div className="h-screen bg-white  border-r  border-gray-200 w-72 pl-6 fixed left-0 top-0">
 
         <div >
@@ -15,11 +20,11 @@ export function Sidebar() {
         </div>
         <div className="mt-15 ">
 
-            <SidebarItem title="Tweets" linkIcon={<TwitterIcon />} />
-            <SidebarItem title="Videos" linkIcon={<YoutubeIcon />} />
-            <SidebarItem title="Documents" linkIcon={<DocumentIcon />} />
-            <SidebarItem title="Links" linkIcon={<LinkIcon />} />
-            <SidebarItem title="Tags" linkIcon={<HashIcon />} />
+            <SidebarItem title="Tweets" linkIcon={<TwitterIcon />} onClick={()=>onFilterChange("twitter")}/>
+            <SidebarItem title="Videos" linkIcon={<YoutubeIcon />} onClick={()=>onFilterChange("youtube")}/>
+            <SidebarItem title="Documents" linkIcon={<DocumentIcon />} onClick={()=>onFilterChange("all")}/>
+            <SidebarItem title="Links" linkIcon={<LinkIcon />} onClick={()=>onFilterChange("all")}/>
+            <SidebarItem title="Tags" linkIcon={<HashIcon />} onClick={()=>onFilterChange("all")}/>
         </div>
 
 

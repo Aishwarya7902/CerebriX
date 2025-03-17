@@ -5,7 +5,7 @@ import { CreateContentModal } from "../components/CreateContentModal"
 import { PlusIcon } from "../icons/PlusIcon"
 import { ShareIcon } from "../icons/ShareIcon"
 import { Sidebar } from "../components/Sidebar"
-import { useContent } from "../hooks/useContent"
+import { ContentItem, useContent } from "../hooks/useContent"
 import axios from "axios"
 import { BACKEND_URL } from "../config"
 import { ShareURL } from "../components/ShareUrl"
@@ -16,6 +16,7 @@ export function Dashboard() {
     const [modalOpen, setModalOpen] = useState(false)
     const [shareUrl, setShareUrl] = useState<string | null>(null);
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [filter, setFilter] = useState<"all" | "youtube" | "twitter">("all");
     const { contents, refresh } = useContent()
     const sidebarRef = useRef<HTMLDivElement>(null)
     useEffect(() => {
@@ -46,7 +47,7 @@ export function Dashboard() {
         {/* Conditionally render Sidebar */}
         <div ref={sidebarRef} className={`fixed inset-y-0 left-0 w-72 bg-white border-r border-gray-200 z-50 
     transition-transform duration-300 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
-            <Sidebar />
+            <Sidebar onFilterChange={setFilter}/>
         </div>
         <div className={`p-4 min-h-screen bg-gray-100 border border-gray-200 transition-all ${sidebarOpen ? "ml-0 sm:ml-72" : "ml-4"}`}>
             <CreateContentModal
@@ -96,14 +97,11 @@ export function Dashboard() {
                 </div>
             )}
             <div className="mt-4 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 transition-all">
-                {contents.map(({ _id,type, link, title }) =>
-                    <Card
-                        contentId={_id}
-                        title={title}
-                        type={type}
-                        link={link}
-                    />
-                )}
+            {contents
+            .filter((item:ContentItem) => filter === "all" || item.type === filter)
+            .map(({ _id, type, link, title }:ContentItem) => (
+              <Card key={_id} contentId={_id} title={title} type={type} link={link} />
+            ))}
             </div>
         </div>
 

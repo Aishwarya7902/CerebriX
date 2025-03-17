@@ -2,8 +2,16 @@ import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../config";
 import axios from "axios";
 
+
+export interface ContentItem {
+    _id: string;
+    title: string;
+    link: string;
+    type: "twitter" | "youtube";
+  }
+
 export function useContent(){
-    const [contents,setContents]=useState([])
+    const [contents,setContents]=useState<ContentItem[]>([])
     function refresh(){
         axios.get(`${BACKEND_URL}/api/v1/content`,{
             headers:{
