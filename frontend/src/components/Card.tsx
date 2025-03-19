@@ -54,7 +54,7 @@ export function Card({ contentId, title, link, type }: CardProps) {
         try {
             await axios.delete(`${BACKEND_URL}/api/v1/content`, {
                 headers: {
-                    "Authorization": localStorage.getItem("token")
+                     "Authorization": `Bearer ${localStorage.getItem("token")}`
                 },
                 data: { contentId }
             });

@@ -8,23 +8,19 @@ export interface CustomRequest extends Request {
 
 export const userMiddleware = (req: CustomRequest, res: Response, next: NextFunction) => {
     const header = req.headers["authorization"];
-    const decoded = jwt.verify(header as string, process.env.JWT_SECRET as string)
-
-    if (decoded) {
-        if (typeof decoded === "string") {
-            res.status(403).json({
-                message: "You are not logged in"
-            })
-
-            return;
-        }
-
-        req.userId = (decoded as JwtPayload).id;
-        next()
+    if (!header || !header.startsWith("Bearer ")) {
+         res.status(401).json({ message: "No or invalid token provided" });
+         return
     }
-    else{
-        res.status(403).json({
-            message:"You are not logged in"
-        })
+
+    const token = header.split(" ")[1]; // Extract token after "Bearer"
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
+        req.userId = decoded.id;
+        next();
+    } catch (error) {
+         res.status(403).json({ message: "Invalid or expired token" });
+         return
     }
 }

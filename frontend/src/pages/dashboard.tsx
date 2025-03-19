@@ -81,7 +81,7 @@ export function Dashboard() {
                             share: true
                         }, {
                             headers: {
-                                "Authorization": localStorage.getItem("token")
+                                "Authorization": `Bearer ${localStorage.getItem("token")}`
                             }
                         })
 

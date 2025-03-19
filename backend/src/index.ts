@@ -99,6 +99,7 @@ app.post("/api/v1/signin", async (req, res) => {
 
     if (!validPassword) {
         res.status(403).json({ message: "Incorrect Credentials" })
+        return;
     }
 
     if (existingUser) {
@@ -110,7 +111,6 @@ app.post("/api/v1/signin", async (req, res) => {
             message: 'Incorrect Credentials'
         })
     }
-
 
 })
 
