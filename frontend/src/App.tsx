@@ -18,8 +18,9 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/signin" element={<Signin />} />
 
-      <Route path="/dashboard" element={<Dashboard />} />
-
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
       <Route path="/share/:shareId" element={<SharedBrain />} />
     </Routes>
   </BrowserRouter>

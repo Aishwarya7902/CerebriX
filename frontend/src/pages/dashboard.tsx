@@ -9,7 +9,8 @@ import { ContentItem, useContent } from "../hooks/useContent"
 import axios from "axios"
 import { BACKEND_URL } from "../config"
 import { ShareURL } from "../components/ShareUrl"
-import { Menu} from "lucide-react"; // Hamburger icon
+import { Menu, LogOut } from "lucide-react"; // Hamburger icon
+import { useNavigate } from "react-router-dom"
 
 
 export function Dashboard() {
@@ -18,7 +19,7 @@ export function Dashboard() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [filter, setFilter] = useState<"all" | "youtube" | "twitter" | "link">("all");
     const { contents, refresh } = useContent()
-    
+    const navigate=useNavigate()
     const sidebarRef = useRef<HTMLDivElement>(null)
     useEffect(() => {
         refresh()
@@ -36,15 +37,26 @@ export function Dashboard() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [sidebarOpen]);
 
-    
+
 
     return <div >
         {/* Hamburger Icon */}
-        <div className="p-4 bg-gray-100 border-b border-gray-200 flex items-center ">
+        <div className="p-4 bg-gray-100 border-b border-gray-200 flex items-center justify-between">
             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-700 focus:outline-none">
                 <Menu className="w-8 h-8" />
             </button>
             <h1 className="ml-4 text-xl font-bold">Dashboard</h1>
+
+            <button
+                onClick={() => {
+                    localStorage.removeItem("token");
+                    navigate("/signin") // Redirect after logout
+                }}
+                className="bg-gradient-to-r from-purple-400 to-purple-600 text-white font-bold px-4 py-2 rounded-full shadow-md hover:scale-105 transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-purple-300"
+            >
+                <LogOut className="w-5 h-5" />
+                Logout
+            </button>
 
         </div>
 
