@@ -22,6 +22,7 @@ export function Dashboard() {
     const { contents, refresh } = useContent()
     const navigate = useNavigate()
     const sidebarRef = useRef<HTMLDivElement>(null)
+    const [showShareUrl, setShowShareUrl] = useState(false)
 
 
     useEffect(() => {
@@ -39,6 +40,16 @@ export function Dashboard() {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [sidebarOpen]);
+
+    useEffect(() => {
+        if (showShareUrl) {
+            const timer = setTimeout(() => {
+                setShowShareUrl(false)
+            }, 5000)
+
+            return () => clearTimeout(timer)
+        }
+    }, [showShareUrl])
 
     // Filter the contents based on the current filter selection
     const filteredContents = contents.filter(
@@ -107,9 +118,7 @@ export function Dashboard() {
 
                         const url = `http://localhost:5173/share/${response.data.hash}`
                         setShareUrl(url);
-
-
-
+                        setShowShareUrl(true)
                     }}
                 />
 
@@ -117,7 +126,7 @@ export function Dashboard() {
             {/* Conditionally render the ShareURL component if shareUrl is set */}
             {shareUrl && (
                 <div className="mt-4">
-                    <ShareURL url={shareUrl} />
+                    {showShareUrl && <ShareURL url={shareUrl} />}
                 </div>
             )}
             <div className="mt-4">
