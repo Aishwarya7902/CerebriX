@@ -10,7 +10,7 @@ import { ContentItem, useContent } from "../hooks/useContent"
 import axios from "axios"
 import { BACKEND_URL } from "../config"
 import { ShareURL } from "../components/ShareUrl"
-import { Menu, LogOut} from "lucide-react"; // Hamburger icon
+import { Menu, LogOut } from "lucide-react"; // Hamburger icon
 import { useNavigate } from "react-router-dom"
 
 
@@ -22,7 +22,7 @@ export function Dashboard() {
     const { contents, refresh } = useContent()
     const navigate = useNavigate()
     const sidebarRef = useRef<HTMLDivElement>(null)
-    
+
 
     useEffect(() => {
         refresh()
@@ -40,8 +40,11 @@ export function Dashboard() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [sidebarOpen]);
 
+    // Filter the contents based on the current filter selection
+    const filteredContents = contents.filter(
+        (item: ContentItem) => filter === "all" || item.type === filter
+    )
 
-    
 
     return <div >
         {/* Hamburger Icon */}
@@ -61,7 +64,7 @@ export function Dashboard() {
                 <LogOut className="w-5 h-5" />
                 Logout
             </button>
-            
+
 
         </div>
 
@@ -117,12 +120,20 @@ export function Dashboard() {
                     <ShareURL url={shareUrl} />
                 </div>
             )}
-            <div className="mt-4 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 transition-all">
-                {contents
-                    .filter((item: ContentItem) => filter === "all" || item.type === filter)
-                    .map(({ _id, type, link, title }: ContentItem) => (
-                        <Card key={_id} contentId={_id} title={title} type={type} link={link} />
-                    ))}
+            <div className="mt-4">
+                {filteredContents.length === 0 ? (
+                    <div className="text-center p-6 bg-blue-50 border border-blue-200 rounded-md shadow">
+                        <p className="text-lg text-blue-700">
+                            No content available. Please add some content to get started.
+                        </p>
+                    </div>
+                ) : (
+                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 transition-all">
+                        {filteredContents.map(({ _id, type, link, title }: ContentItem) => (
+                            <Card key={_id} contentId={_id} title={title} type={type} link={link} />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
 
