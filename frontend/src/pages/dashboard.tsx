@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react"
 import { Button } from "../components/Button"
 import { Card } from "../components/Card"
@@ -9,7 +10,7 @@ import { ContentItem, useContent } from "../hooks/useContent"
 import axios from "axios"
 import { BACKEND_URL } from "../config"
 import { ShareURL } from "../components/ShareUrl"
-import { Menu, LogOut } from "lucide-react"; // Hamburger icon
+import { Menu, LogOut} from "lucide-react"; // Hamburger icon
 import { useNavigate } from "react-router-dom"
 
 
@@ -19,8 +20,10 @@ export function Dashboard() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [filter, setFilter] = useState<"all" | "youtube" | "twitter" | "link">("all");
     const { contents, refresh } = useContent()
-    const navigate=useNavigate()
+    const navigate = useNavigate()
     const sidebarRef = useRef<HTMLDivElement>(null)
+    
+
     useEffect(() => {
         refresh()
     }, [modalOpen])
@@ -38,6 +41,7 @@ export function Dashboard() {
     }, [sidebarOpen]);
 
 
+    
 
     return <div >
         {/* Hamburger Icon */}
@@ -57,6 +61,7 @@ export function Dashboard() {
                 <LogOut className="w-5 h-5" />
                 Logout
             </button>
+            
 
         </div>
 

@@ -219,37 +219,47 @@ app.post("/api/v1/brain/share", userMiddleware, async (req: CustomRequest, res: 
 })
 
 app.get("/api/v1/brain/:shareLink", async (req: CustomRequest, res: Response) => {
-    const hash = req.params.shareLink
-
-    const link = await LinkModel.findOne({
-        hash
-    })
-
-    if (!link) {
-        res.status(411).json({
-            message: "Sorry Incorrect inputs"
+    try {
+        const hash = req.params.shareLink
+        // Look up the shared link
+        const link = await LinkModel.findOne({
+            hash
         })
-    }
 
-    const content = await ContentModel.find({
-        userId: link?.userId
-    })
-
-    const user = await UserModel.findOne({
-        _id: link?.userId
-    })
-
-    if (!user) {
-        res.status(411).json({
-            message: "user does not exist ,Something went wrong"
+        if (!link) {
+            res.status(404).json({
+                message: "Invalid share link."
+            })
+            return;
+        }
+        // Retrieve the content associated with the userId from the link
+        const content = await ContentModel.find({
+            userId: link?.userId
         })
+        // Retrieve the user associated with the link
+        const user = await UserModel.findOne({
+            _id: link?.userId
+        })
+
+        if (!user) {
+            res.status(404).json({
+                message: "user does not exist ,Something went wrong"
+            })
+            return;
+        }
+        // Return the user info and content
+        res.json({
+            username: user?.username,
+            content: content
+        })
+        return;
+
     }
-
-    res.json({
-        username: user?.username,
-        content: content
-    })
-
+    catch (error) {
+        console.error("Error fetching shared content:", error);
+        res.status(500).json({ message: "Internal server error." });
+        return
+    }
 
 })
 
