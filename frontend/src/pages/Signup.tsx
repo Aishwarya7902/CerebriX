@@ -41,7 +41,7 @@ export function Signup() {
             // storing token in local storage
             localStorage.setItem("token", response.data.token)
             setLoading(false)
-            alert("You have signed up successfully!");
+            
             //navigate to the dashboard
             navigate("/dashboard")
         }
@@ -63,39 +63,49 @@ export function Signup() {
         }
 
     }
-    return <div className="h-screen w-screen flex justify-center items-center bg-gray-200">
-        <div className="bg-white rounded-xl  w-full max-w-sm p-8">
-            <h2 className="text-xl font-bold mb-4 text-center">Sign Up</h2>
-            {error && (
-                <div className="mb-4 text-red-500 text-center">
-                    {Array.isArray(error)
-                        ? error.map((err: any, index: number) => (
-                            <div key={index}>{err.message}</div>
-                        ))
-                        : error}
-                </div>
-            )}
+    return (
+        <div
+        className="h-screen w-screen flex justify-center items-center relative bg-cover bg-center"
+        style={{
+            backgroundImage:
+                "url('/background_anime.avif')",
+        }}
+    >
+        {/* Soft gradient overlay for an anime vibe */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white opacity-60"></div>
 
-
-            {/* A single container to hold inputs and button with consistent spacing */}
-            
-                    <Input reference={usernameRef} placeholder="username" />
-               
-
-               
-                    <Input reference={passwordRef} placeholder="password" type="password" />
-                
-
-                
-                <div className="flex justify-center items-center pt-2 ml-2">
-                    <Button
-                        onClick={signup}
-                        loading={loading}
-                        variant="primary"
-                        text="Signup"
-                        fullWidth={true}
-                    />
+        {/* Anime-inspired Card with Pastel Gradient Border */}
+        <div className="relative  ">
+            <div className="p-1 rounded-3xl bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300">
+                <div className="bg-pink-100 bg-opacity-70 backdrop-blur-md rounded-3xl shadow-2xl max-w-sm w-full p-10">
+                    <h2 className="text-3xl font-extrabold text-center mb-6 text-pink-600">Welcome!!</h2>
+                    <div
+                        style={{
+                            maxHeight: error ? "100px" : "0px",
+                            opacity: error ? 1 : 0,
+                            transition: "max-height 0.5s ease, opacity 0.5s ease",
+                            overflow: "hidden",
+                        }}
+                        className="mb-4 text-center text-red-500"
+                    >
+                        {error}
+                    </div>
+                    <div className="space-y-4">
+                        <Input reference={usernameRef} placeholder="Username" type="text" />
+                        <Input reference={passwordRef} placeholder="Password" type="password" />
+                    </div>
+                    <div className="mt-6">
+                        <Button
+                            onClick={signup}
+                            loading={loading}
+                            variant="primary"
+                            text="Sign Up"
+                            fullWidth={true}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+    )
 }
