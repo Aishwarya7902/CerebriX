@@ -3,7 +3,7 @@ import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function Signin() {
     const usernameRef = useRef<HTMLInputElement>();
@@ -92,6 +92,7 @@ export function Signin() {
                                 fullWidth={true}
                             />
                         </div>
+                        <p className='text-center mt-2'>New here? <Link to='/signup' className='text-blue-600'>Create new Account</Link></p>
                     </div>
                 </div>
             </div>
