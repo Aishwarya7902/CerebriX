@@ -26,7 +26,7 @@ export function SharedBrain() {
 
     return <>
 
-        <div className="max-w-7xl mx-auto p-4">
+        <div className="max-w-7xl mx-auto p-4 bg-gray-200">
             <h1 className="text-3xl font-bold text-center mb-4">
                 {username ? `Shared by ${username}` : "Shared Contents"}
             </h1>

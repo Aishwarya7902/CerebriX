@@ -9,10 +9,33 @@ import { random } from './utils';
 import cors from "cors"
 import { z } from 'zod'
 import bcrypt from 'bcrypt'
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 const app = express();
 app.use(express.json())
+
 app.use(cors());
+app.use(
+    helmet({
+        crossOriginResourcePolicy: false, // Allows images, fonts, etc.
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'", "data:", "blob:"], // Allow self and base64/blob
+                scriptSrc: ["'self'", "'unsafe-inline'", "https:"], // Allow scripts from same origin
+            },
+        },
+    })
+);
+
+//rate limit logic
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.',
+});
+app.use(limiter);
+
 
 // making signup Schema
 const signupSchema = z.object({
