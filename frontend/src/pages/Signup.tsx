@@ -72,12 +72,12 @@ export function Signup() {
         }}
     >
         {/* Soft gradient overlay for an anime vibe */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white opacity-60"></div>
+        <div className="absolute inset-0 bg-purple-500 bg-gradient-to-b from-transparent to-white opacity-60"></div>
 
         {/* Anime-inspired Card with Pastel Gradient Border */}
         <div className="relative  ">
             <div className="p-1 rounded-3xl bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300">
-                <div className="bg-pink-100 bg-opacity-70 backdrop-blur-md rounded-3xl shadow-2xl max-w-sm w-full p-10">
+                <div className="bg-pink-200 bg-opacity-70 backdrop-blur-md rounded-3xl shadow-2xl max-w-sm w-full p-10">
                     <h2 className="text-3xl font-extrabold text-center mb-6 text-pink-600">Welcome!!</h2>
                     <div
                         style={{
