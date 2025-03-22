@@ -12,17 +12,22 @@ enum contentType {
     Link = "link"
 }
 
-export function CreateContentModal({ open, onClose }) {
-    const titleRef = useRef<HTMLInputElement>()
-    const linkRef = useRef<HTMLInputElement>()
+// Define the expected props for the component
+interface CreateContentModalProps {
+    open: boolean;
+    onClose: () => void;
+}
+export function CreateContentModal({ open, onClose }:CreateContentModalProps) {
+    const titleRef = useRef<HTMLInputElement>(null)
+    const linkRef = useRef<HTMLInputElement>(null)
     const [type, setType] = useState(contentType.Youtube)
     const navigate = useNavigate();
 
 
 
     async function addContent() {
-        const title = titleRef.current?.value
-        const link = linkRef.current?.value
+        const title = titleRef.current?.value || "";
+        const link = linkRef.current?.value || "";
         try {
             await axios.post(
                 `${BACKEND_URL}/api/v1/content`,

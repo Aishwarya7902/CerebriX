@@ -7,8 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 export function Signup() {
 
-    const usernameRef = useRef<HTMLInputElement>();
-    const passwordRef = useRef<HTMLInputElement>();
+    const usernameRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("")
     const navigate = useNavigate()

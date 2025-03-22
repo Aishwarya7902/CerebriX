@@ -6,15 +6,16 @@ import { BACKEND_URL } from "../config";
 import { Link, useNavigate } from "react-router-dom";
 
 export function Signin() {
-    const usernameRef = useRef<HTMLInputElement>();
-    const passwordRef = useRef<HTMLInputElement>();
+    const usernameRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
     const navigate = useNavigate();
 
     async function signin() {
-        const username = usernameRef.current?.value;
-        const password = passwordRef.current?.value;
+        const username = usernameRef.current?.value || "";
+        const password = passwordRef.current?.value || "";
+
 
         if (!username || !password) {
             setError("Both username and password are required");
