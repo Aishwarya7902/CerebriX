@@ -4,7 +4,8 @@ import { Signin } from "./pages/Signin"
 import { Dashboard } from "./pages/dashboard"
 import { SharedBrain } from "./pages/sharedBrain"
 import { Landing } from "./pages/landing"
-import { ProtectedRoute } from "./pages/protectedRoute"
+import { ProtectedRoute } from "./pages/ProtecteRoute"
+
 
 
 
