@@ -12,10 +12,9 @@ export function Signin() {
     const [error, setError] = useState<string>("");
     const navigate = useNavigate();
 
-    async function signin() {
-        const username = usernameRef.current?.value || "";
-        const password = passwordRef.current?.value || "";
-
+    async function signin(username?: string, password?: string) {
+        const user = username || usernameRef.current?.value || "";
+        const pass = password || passwordRef.current?.value || "";
 
         if (!username || !password) {
             setError("Both username and password are required");
@@ -31,8 +30,8 @@ export function Signin() {
             setError("");
             setLoading(true);
             const response = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
-                username,
-                password,
+                username: user,
+                password: pass,
             });
             const jwt = response.data.token;
             localStorage.setItem("token", jwt);
@@ -84,7 +83,7 @@ export function Signin() {
                             <Input reference={usernameRef} placeholder="Username" type="text" />
                             <Input reference={passwordRef} placeholder="Password" type="password" />
                         </div>
-                        <div className="mt-6">
+                        <div className="mt-6 space-y-2">
                             <Button
                                 onClick={signin}
                                 loading={loading}
@@ -92,6 +91,7 @@ export function Signin() {
                                 text="Sign In"
                                 fullWidth={true}
                             />
+                            <Button onClick={() => signin("test2", "test21234")} loading={loading} variant="secondary" text="Test Login" fullWidth={true} />
                         </div>
                         <p className='text-center mt-2'>New here? <Link to='/signup' className='text-blue-600'>Create new Account</Link></p>
                     </div>
