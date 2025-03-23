@@ -16,7 +16,7 @@ export function Signin() {
         const user = username || usernameRef.current?.value || "";
         const pass = password || passwordRef.current?.value || "";
 
-        if (!username || !password) {
+        if (!user || !pass) {
             setError("Both username and password are required");
             setTimeout(() => {
                 setError("");
