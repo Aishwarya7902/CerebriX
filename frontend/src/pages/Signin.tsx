@@ -29,6 +29,9 @@ export function Signin() {
         try {
             setError("");
             setLoading(true);
+            console.log("Sending sign-in request to:", `${BACKEND_URL}/api/v1/signin`);
+            console.log("Payload:", { username: user, password: pass });
+
             const response = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
                 username: user,
                 password: pass,
@@ -85,7 +88,7 @@ export function Signin() {
                         </div>
                         <div className="mt-6 space-y-2">
                             <Button
-                                onClick={signin}
+                                onClick={() => signin()}
                                 loading={loading}
                                 variant="primary"
                                 text="Sign In"
