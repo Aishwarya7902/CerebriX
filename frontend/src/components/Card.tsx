@@ -54,7 +54,7 @@ export function Card({ contentId, title, link, type }: CardProps) {
         try {
             await axios.delete(`${BACKEND_URL}/api/v1/content`, {
                 headers: {
-                     "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
                 },
                 data: { contentId }
             });
@@ -175,12 +175,14 @@ export function Card({ contentId, title, link, type }: CardProps) {
                             href={link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-extrabold py-2 px-4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-2xl truncate"
+                            className="block bg-purple-400 text-white font-medium py-2 px-4 rounded-md shadow-md transition duration-300 hover:bg-purple-500 hover:shadow-lg truncate"
                         >
                             {link}
                         </a>
                     </div>
                 )}
+
+
             </div>
         </div>
     </div>

@@ -42,7 +42,7 @@ export function Dashboard() {
     }, [sidebarOpen]);
 
     useEffect(() => {
-        if ( showShareUrl) {
+        if (showShareUrl) {
             const timer = setTimeout(() => {
                 setShowShareUrl(false)
             }, 5000)
@@ -124,9 +124,9 @@ export function Dashboard() {
 
             </div>
             {/* Conditionally render the ShareURL component if shareUrl is set */}
-            { shareUrl && (
+            {shareUrl && (
                 <div className="mt-4">
-                      {showShareUrl && <ShareURL url={shareUrl} />}
+                    {showShareUrl && <ShareURL url={shareUrl} />}
                 </div>
             )}
             <div className="mt-4">
