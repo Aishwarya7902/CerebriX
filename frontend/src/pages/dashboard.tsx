@@ -8,7 +8,7 @@ import { ShareIcon } from "../icons/ShareIcon"
 import { Sidebar } from "../components/Sidebar"
 import { ContentItem, useContent } from "../hooks/useContent"
 import axios from "axios"
-import { BACKEND_URL } from "../config"
+import { BACKEND_URL, FRONTEND_URL } from "../config"
 import { ShareURL } from "../components/ShareUrl"
 import { Menu, LogOut } from "lucide-react"; // Hamburger icon
 import { useNavigate } from "react-router-dom"
@@ -116,7 +116,7 @@ export function Dashboard() {
                             }
                         })
 
-                        const url = `http://localhost:5173/share/${response.data.hash}`
+                        const url = `${FRONTEND_URL}/share/${response.data.hash}`
                         setShareUrl(url);
                         setShowShareUrl(true)
                     }}

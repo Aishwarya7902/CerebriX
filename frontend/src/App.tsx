@@ -6,13 +6,6 @@ import { SharedBrain } from "./pages/sharedBrain"
 import { Landing } from "./pages/landing"
 import { ProtectedRoute } from "./pages/ProtecteRoute"
 
-
-
-
-
-
-
-
 function App() {
 
 
